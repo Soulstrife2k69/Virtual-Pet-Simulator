@@ -1,0 +1,80 @@
+import time
+
+def feed_pet(pet):
+    if pet["hunger"] > 0:
+        pet["hunger"] = max(0, pet["hunger"] - 15)
+        pet["happiness"] = max(0, pet["happiness"] - 5)
+        print(f"🍖 You fed {pet['name']}! Hunger decreased, but happiness slightly dropped.")
+    else:
+        print(f"✅ {pet['name']} is already full!")
+
+def play_with_pet(pet):
+    if pet["happiness"] < 100:
+        pet["happiness"] = min(100, pet["happiness"] + 15)
+        pet["hunger"] = min(100, pet["hunger"] + 5)
+        print(f"🎾 You played with {pet['name']}! Happiness increased, but hunger slightly increased.")
+    else:
+        print(f"✅ {pet['name']} is already super happy!")
+
+def check_status(pet):
+    print("\n====== Pet Status ======")
+    print(f"Name: {pet['name']}")
+    print(f"Hunger Level: {pet['hunger']}/100")
+    print(f"Happiness Level: {pet['happiness']}/100")
+    if pet["hunger"] > 80:
+        print(f"⚠️ {pet['name']} is very hungry and looking sad!")
+    elif pet["happiness"] < 20:
+        print(f"⚠️ {pet['name']} seems unhappy!")
+    print("========================\n")
+
+def automatic_changes(pet):
+    pet["hunger"] = min(100, pet["hunger"] + 3)
+    pet["happiness"] = max(0, pet["happiness"] - 2)
+    if pet["hunger"] > 80:
+        pet["happiness"] = max(0, pet["happiness"] - 5)
+
+def check_game_over(pet):
+    if pet["hunger"] >= 100:
+        print(f"💀 Oh no! {pet['name']} got too hungry and ran away...")
+        return True
+    if pet["happiness"] <= 0:
+        print(f"💀 {pet['name']} became too sad and doesn't want to play anymore...")
+        return True
+    return False
+
+def menu():
+    pet_name = input("🐶 Welcome to Virtual Pet Simulator! Name your pet: ")
+    pet = {"name": pet_name, "hunger": 50, "happiness": 50}
+    
+    actions_count = 0
+
+    while True:
+        print("\n====== What would you like to do? ======")
+        print("1. Feed the pet")
+        print("2. Play with the pet")
+        print("3. Check pet status")
+        print("4. Quit the game")
+        choice = input("Enter choice (1/2/3/4): ")
+
+        if choice == "1":
+            feed_pet(pet)
+        elif choice == "2":
+            play_with_pet(pet)
+        elif choice == "3":
+            check_status(pet)
+        elif choice == "4":
+            print(f"👋 Thanks for playing! Bye-bye from {pet['name']}!")
+            break
+        else:
+            print("❌ Invalid choice! Please select 1, 2, 3, or 4.")
+
+        actions_count += 1
+        if actions_count % 2 == 0:
+            automatic_changes(pet)
+
+        if check_game_over(pet):
+            break
+        time.sleep(0.5)
+
+if __name__ == "__main__":
+    menu()
